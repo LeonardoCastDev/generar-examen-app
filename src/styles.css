@@ -1,0 +1,130 @@
+:root {
+  --gap: 12px;
+}
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  background: #f7f7f8;
+  color: #111;
+}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.center {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+}
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: #111;
+}
+.row {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+}
+.row.between {
+  justify-content: space-between;
+}
+.row.end {
+  justify-content: flex-end;
+}
+.row.gap {
+  gap: 24px;
+}
+.col {
+  flex: 1;
+}
+.card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  padding: 0;
+  list-style: none;
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.pdf {
+  background: #fff;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+button {
+  background: #111;
+  color: #fff;
+  border: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button.danger {
+  background: #c03434;
+}
+input,
+select,
+textarea {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+.error {
+  color: #c03434;
+}
+.user {
+  opacity: 0.7;
+  margin-right: 8px;
+}
+.empty {
+  text-align: center;
+  padding: 48px;
+  background: #fff;
+  border-radius: 12px;
+}
