@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
-import type { Exam, Question } from "@types/domain";
+//import type { Exam, Question } from "@types/domain";
+import type { Exam, Question } from "@typesAlias/domain";
 import { todayISO } from "@utils/date";
 
 const styles = StyleSheet.create({
