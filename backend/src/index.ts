@@ -11,6 +11,11 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
+// ✅ Ruta de prueba
+app.get("/", (req, res) => {
+  res.send("Backend corriendo ✅");
+});
+
 app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
