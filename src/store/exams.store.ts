@@ -1,4 +1,82 @@
+// src/store/exams.store.ts
 import { create } from "zustand";
+import type { Exam, Question } from "@typesAlias/domain";
+
+// Tipos del store
+interface Preview {
+  seed: number;
+  teacherKey: boolean;
+  selection: Question[];
+}
+
+export interface ExamsState {
+  exams: Exam[];
+  currentExam: Exam | null;
+  questions: Question[];
+  preview: Preview | null;
+
+  fetchExams: () => Promise<void>;
+  createExam: (title: string, total_questions: number) => Promise<void>;
+  removeExam: (id: number) => Promise<void>;
+  loadExam: (id: number) => Promise<void>;
+  addQuestion: (q: Omit<Question, "id" | "exam_id">) => Promise<void>;
+  updateQuestion: (
+    id: number,
+    patch: Partial<Omit<Question, "id" | "exam_id">>
+  ) => Promise<void>;
+  deleteQuestion: (id: number) => Promise<void>;
+  makePreview: (teacherKey?: boolean) => void;
+  rerandomize: () => void;
+}
+
+// Función shuffle simple
+function shuffle<T>(array: T[], seed: number): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor((Math.sin(seed + i) * 10000) % (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Mock API temporal
+const Exams = {
+  listExams: async (): Promise<Exam[]> => [],
+  createExam: async (data: {
+    title: string;
+    total_questions: number;
+  }): Promise<Exam> => ({
+    id: Math.floor(Math.random() * 10000),
+    title: data.title,
+    total_questions: data.total_questions,
+    user_id: 1,
+  }),
+  deleteExam: async (id: number) => {},
+};
+
+const Questions = {
+  listQuestions: async (examId: number): Promise<Question[]> => [],
+  createQuestion: async (
+    examId: number,
+    q: Omit<Question, "id" | "exam_id">
+  ): Promise<Question> => ({
+    ...q,
+    id: Math.floor(Math.random() * 10000),
+    exam_id: examId,
+  }),
+  updateQuestion: async (
+    examId: number,
+    id: number,
+    patch: Partial<Omit<Question, "id" | "exam_id">>
+  ): Promise<Question> => ({
+    id,
+    exam_id: examId,
+    type: patch.type || "open",
+    question_text: patch.question_text || "",
+    options: patch.options,
+  }),
+  deleteQuestion: async (examId: number, id: number) => {},
+};
 
 export const useExams = create<ExamsState>((set, get) => ({
   exams: [],
@@ -25,7 +103,7 @@ export const useExams = create<ExamsState>((set, get) => ({
   },
 
   async loadExam(id) {
-    const exam = (await Exams.listExams()).find((e) => e.id === id) || null; // or Exams.get(id)
+    const exam = (await Exams.listExams()).find((e) => e.id === id) || null;
     const questions = exam ? await Questions.listQuestions(exam.id) : [];
     set({ currentExam: exam, questions, preview: null });
   },
@@ -70,7 +148,6 @@ export const useExams = create<ExamsState>((set, get) => ({
   rerandomize() {
     const p = get().preview;
     if (!p) return;
-    // keep teacherKey and re-sample with a new seed
     const exam = get().currentExam!;
     const all = get().questions;
     const seed = Math.floor(Math.random() * 1e9);

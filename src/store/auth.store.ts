@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import type { User } from "@types/domain";
+//import type { User } from "@types/domain";
+import type { User } from "@typesAlias/domain";
 import * as Auth from "@services/auth";
 
 interface AuthState {

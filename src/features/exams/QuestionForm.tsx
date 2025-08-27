@@ -1,5 +1,6 @@
 import { useState } from "react";
-import type { Question, Option, QuestionType } from "@types/domain";
+//import type { Question, Option, QuestionType } from "@types/domain";
+import type { Question, Option, QuestionType } from "@typesAlias/domain";
 
 interface Props {
   initial?: Partial<Question>;

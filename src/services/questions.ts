@@ -1,5 +1,6 @@
 import { api } from "./api";
-import type { Question, Option } from "@types/domain";
+//import type { Question, Option } from "@types/domain";
+import type { Question, Option } from "@typesAlias/domain";
 
 export async function listQuestions(examId: number): Promise<Question[]> {
   const { data } = await api.get(`/exams/${examId}/questions`);

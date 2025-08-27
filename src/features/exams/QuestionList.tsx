@@ -1,4 +1,5 @@
-import type { Question } from "@types/domain";
+//import type { Question } from "@types/domain";
+import type { Question } from "@typesAlias/domain";
 
 export default function QuestionList({
   questions,

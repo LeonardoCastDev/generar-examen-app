@@ -1,19 +1,29 @@
-import { useEffect, useState } from "react";
-import { useExams } from "@store/exams.store";
+// src/features/exams/ExamEditorPage.tsx
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+import Navbar from "@components/Navbar";
+import QuestionForm from "@features/exams/QuestionForm";
+import QuestionList from "@features/exams/QuestionList";
 import ConfirmDialog from "@components/ConfirmDialog";
-import type { Question } from "@types/domain";
+
+import { useExams } from "@store/exams.store";
+import type { Question } from "@typesAlias/domain";
 
 export default function ExamEditorPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
   const nav = useNavigate();
+
   const {
     loadExam,
     currentExam,
     questions,
     addQuestion,
+    updateQuestion,
     deleteQuestion,
     makePreview,
   } = useExams();
+
   const [editing, setEditing] = useState<Question | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<Question | null>(null);
 
@@ -47,8 +57,19 @@ export default function ExamEditorPage() {
         <div className="row gap">
           <div className="col">
             <h3>Agregar una pregunta</h3>
-            <QuestionForm onSave={(q) => void addQuestion(q)} />
+            <QuestionForm
+              initial={editing ?? undefined}
+              onSave={(q) => {
+                if (editing) {
+                  void updateQuestion(editing.id, q);
+                  setEditing(null);
+                } else {
+                  void addQuestion(q);
+                }
+              }}
+            />
           </div>
+
           <div className="col">
             <h3>Todas las preguntas</h3>
             <QuestionList
