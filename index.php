@@ -377,7 +377,22 @@ $examenes_recientes = $examGenerator->getExamenesUsuario($_SESSION['user_id'], 5
                 </div>
             </div>
         </div>
+    
+<div class="col-md-3 mb-3">
+    <div class="card h-100 text-center card-hover">
+        <div class="card-body">
+            <i class="fas fa-cogs fa-3x text-danger mb-3"></i>
+            <h5 class="card-title">Gestionar Preguntas</h5>
+            <p class="card-text">Administra y elimina preguntas del banco</p>
+            <a href="gestionar_preguntas.php" class="btn btn-danger">
+                <i class="fas fa-cogs me-1"></i>
+                Gestionar
+            </a>
+        </div>
     </div>
+</div>
+
+</div>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

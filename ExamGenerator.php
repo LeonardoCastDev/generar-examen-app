@@ -494,5 +494,268 @@ class ExamGenerator {
             ];
         }
     }
+
+    /**
+     * Obtener todas las preguntas del banco con paginación y filtros
+     */
+    public function getPreguntasBanco($id_materia = null, $tipo_pregunta = null, $nivel_dificultad = null, $pagina = 1, $limite = 10) {
+        try {
+            $where_conditions = ["bp.activa = 1"];
+            $params = [];
+            
+            if ($id_materia) {
+                $where_conditions[] = "bp.id_materia = ?";
+                $params[] = $id_materia;
+            }
+            
+            if ($tipo_pregunta) {
+                $where_conditions[] = "bp.tipo_pregunta = ?";
+                $params[] = $tipo_pregunta;
+            }
+            
+            if ($nivel_dificultad) {
+                $where_conditions[] = "bp.nivel_dificultad = ?";
+                $params[] = $nivel_dificultad;
+            }
+            
+            $where_clause = implode(" AND ", $where_conditions);
+            $offset = ($pagina - 1) * $limite;
+            
+            // Obtener el total de preguntas para paginación
+            $count_sql = "SELECT COUNT(*) FROM banco_preguntas bp WHERE $where_clause";
+            $stmt = $this->pdo->prepare($count_sql);
+            $stmt->execute($params);
+            $total = $stmt->fetchColumn();
+            
+            // Obtener las preguntas
+            $sql = "
+                SELECT bp.*, m.nombre_materia
+                FROM banco_preguntas bp
+                JOIN materias m ON bp.id_materia = m.id_materia
+                WHERE $where_clause
+                ORDER BY bp.fecha_creacion DESC
+                LIMIT ? OFFSET ?
+            ";
+            
+            $params[] = $limite;
+            $params[] = $offset;
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $preguntas = $stmt->fetchAll();
+            
+            return [
+                'preguntas' => $preguntas,
+                'total' => $total,
+                'pagina_actual' => $pagina,
+                'total_paginas' => ceil($total / $limite),
+                'limite' => $limite
+            ];
+            
+        } catch (PDOException $e) {
+            error_log("Error obteniendo preguntas del banco: " . $e->getMessage());
+            return [
+                'preguntas' => [],
+                'total' => 0,
+                'pagina_actual' => 1,
+                'total_paginas' => 0,
+                'limite' => $limite
+            ];
+        }
+    }
+
+    /**
+     * Obtener una pregunta específica con sus opciones/respuestas
+     */
+    public function getPreguntaCompleta($id_pregunta_banco) {
+        try {
+            // Obtener datos básicos de la pregunta
+            $stmt = $this->pdo->prepare("
+                SELECT bp.*, m.nombre_materia
+                FROM banco_preguntas bp
+                JOIN materias m ON bp.id_materia = m.id_materia
+                WHERE bp.id_pregunta_banco = ? AND bp.activa = 1
+            ");
+            $stmt->execute([$id_pregunta_banco]);
+            $pregunta = $stmt->fetch();
+            
+            if (!$pregunta) {
+                return null;
+            }
+            
+            // Obtener opciones para preguntas múltiples
+            if ($pregunta['tipo_pregunta'] === 'multiple') {
+                $stmt = $this->pdo->prepare("
+                    SELECT * FROM opciones_banco
+                    WHERE id_pregunta_banco = ?
+                    ORDER BY letra_opcion
+                ");
+                $stmt->execute([$id_pregunta_banco]);
+                $pregunta['opciones'] = $stmt->fetchAll();
+            }
+            
+            // Obtener respuestas para preguntas abiertas y verdadero/falso
+            if (in_array($pregunta['tipo_pregunta'], ['abierta', 'verdadero_falso'])) {
+                $stmt = $this->pdo->prepare("
+                    SELECT * FROM respuestas_banco
+                    WHERE id_pregunta_banco = ?
+                ");
+                $stmt->execute([$id_pregunta_banco]);
+                $pregunta['respuestas'] = $stmt->fetchAll();
+            }
+            
+            return $pregunta;
+            
+        } catch (PDOException $e) {
+            error_log("Error obteniendo pregunta completa: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Eliminar pregunta del banco (marcar como inactiva)
+     */
+    public function eliminarPregunta($id_pregunta_banco, $id_usuario) {
+        try {
+            $this->pdo->beginTransaction();
+            
+            // Verificar que la pregunta existe
+            $stmt = $this->pdo->prepare("SELECT id_pregunta_banco, enunciado FROM banco_preguntas WHERE id_pregunta_banco = ? AND activa = 1");
+            $stmt->execute([$id_pregunta_banco]);
+            $pregunta = $stmt->fetch();
+            
+            if (!$pregunta) {
+                throw new Exception("Pregunta no encontrada o ya eliminada");
+            }
+            
+            // Verificar si la pregunta está siendo usada en exámenes activos
+            $stmt = $this->pdo->prepare("
+                SELECT COUNT(*) FROM preguntas_examen pe
+                JOIN examenes_generados eg ON pe.id_examen = eg.id_examen
+                WHERE pe.id_pregunta_banco = ? AND eg.activo = 1
+            ");
+            $stmt->execute([$id_pregunta_banco]);
+            $examenes_activos = $stmt->fetchColumn();
+            
+            if ($examenes_activos > 0) {
+                throw new Exception("No se puede eliminar esta pregunta porque está siendo usada en {$examenes_activos} examen(es) activo(s)");
+            }
+            
+            // Marcar pregunta como inactiva
+            $stmt = $this->pdo->prepare("UPDATE banco_preguntas SET activa = 0 WHERE id_pregunta_banco = ?");
+            $stmt->execute([$id_pregunta_banco]);
+            
+            // Registrar en historial
+            $this->registrarHistorial($id_usuario, null, 'eliminar_pregunta', [
+                'id_pregunta_banco' => $id_pregunta_banco,
+                'enunciado' => $pregunta['enunciado']
+            ]);
+            
+            $this->pdo->commit();
+            
+            return [
+                'success' => true,
+                'message' => 'Pregunta eliminada correctamente'
+            ];
+            
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            error_log("Error eliminando pregunta: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al eliminar la pregunta: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Restaurar pregunta eliminada
+     */
+    public function restaurarPregunta($id_pregunta_banco, $id_usuario) {
+        try {
+            $this->pdo->beginTransaction();
+            
+            // Verificar que la pregunta existe y está inactiva
+            $stmt = $this->pdo->prepare("SELECT id_pregunta_banco, enunciado FROM banco_preguntas WHERE id_pregunta_banco = ? AND activa = 0");
+            $stmt->execute([$id_pregunta_banco]);
+            $pregunta = $stmt->fetch();
+            
+            if (!$pregunta) {
+                throw new Exception("Pregunta no encontrada o no está eliminada");
+            }
+            
+            // Restaurar pregunta
+            $stmt = $this->pdo->prepare("UPDATE banco_preguntas SET activa = 1 WHERE id_pregunta_banco = ?");
+            $stmt->execute([$id_pregunta_banco]);
+            
+            // Registrar en historial
+            $this->registrarHistorial($id_usuario, null, 'restaurar_pregunta', [
+                'id_pregunta_banco' => $id_pregunta_banco,
+                'enunciado' => $pregunta['enunciado']
+            ]);
+            
+            $this->pdo->commit();
+            
+            return [
+                'success' => true,
+                'message' => 'Pregunta restaurada correctamente'
+            ];
+            
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            error_log("Error restaurando pregunta: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al restaurar la pregunta: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Obtener estadísticas del banco de preguntas
+     */
+    public function getEstadisticasBanco($id_materia = null) {
+        try {
+            $stats = [];
+            $where_materia = $id_materia ? "WHERE id_materia = ?" : "";
+            $params = $id_materia ? [$id_materia] : [];
+            
+            // Total de preguntas activas
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM banco_preguntas WHERE activa = 1 $where_materia");
+            $stmt->execute($params);
+            $stats['total_activas'] = $stmt->fetchColumn();
+            
+            // Total de preguntas inactivas
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM banco_preguntas WHERE activa = 0 $where_materia");
+            $stmt->execute($params);
+            $stats['total_eliminadas'] = $stmt->fetchColumn();
+            
+            // Por tipo de pregunta
+            $stmt = $this->pdo->prepare("
+                SELECT tipo_pregunta, COUNT(*) as cantidad
+                FROM banco_preguntas
+                WHERE activa = 1 $where_materia
+                GROUP BY tipo_pregunta
+            ");
+            $stmt->execute($params);
+            $stats['por_tipo'] = $stmt->fetchAll();
+            
+            // Por nivel de dificultad
+            $stmt = $this->pdo->prepare("
+                SELECT nivel_dificultad, COUNT(*) as cantidad
+                FROM banco_preguntas
+                WHERE activa = 1 $where_materia
+                GROUP BY nivel_dificultad
+            ");
+            $stmt->execute($params);
+            $stats['por_dificultad'] = $stmt->fetchAll();
+            
+            return $stats;
+            
+        } catch (PDOException $e) {
+            error_log("Error obteniendo estadísticas del banco: " . $e->getMessage());
+            return [];
+        }
+    }
 }
 ?>
