@@ -507,6 +507,246 @@ ALTER TABLE `preguntas_examen`
 --
 ALTER TABLE `respuestas_banco`
   ADD CONSTRAINT `respuestas_banco_ibfk_1` FOREIGN KEY (`id_pregunta_banco`) REFERENCES `banco_preguntas` (`id_pregunta_banco`) ON DELETE CASCADE;
+
+
+
+-- *** INSERTS PARA banco_preguntas (Total 55 preguntas nuevas, el id_pregunta_banco comienza en 6) ***
+
+-- Materia 1: Matemáticas (5 nuevas preguntas, id_materia=1)
+INSERT INTO `banco_preguntas` (`id_pregunta_banco`, `id_materia`, `enunciado`, `tipo_pregunta`, `nivel_dificultad`, `puntuacion`, `activa`) VALUES
+(6, 1, '¿Cuántos lados tiene un hexágono?', 'multiple', 'facil', 1.0, 1),
+(7, 1, 'Un triángulo con 3 lados iguales se llama isósceles.', 'verdadero_falso', 'facil', 1.0, 1),
+(8, 1, 'Calcula el área de un cuadrado de lado 5 cm.', 'abierta', 'medio', 1.5, 1),
+(9, 1, '¿Cuál es el valor de 2^3?', 'multiple', 'medio', 1.0, 1),
+(10, 1, 'La suma de los ángulos internos de un cuadrilátero es 360 grados.', 'verdadero_falso', 'facil', 1.0, 1);
+
+-- Materia 2: Historia (10 preguntas, id_materia=2)
+INSERT INTO `banco_preguntas` (`id_pregunta_banco`, `id_materia`, `enunciado`, `tipo_pregunta`, `nivel_dificultad`, `puntuacion`, `activa`) VALUES
+(11, 2, '¿En qué año cayó el Muro de Berlín?', 'multiple', 'medio', 1.0, 1),
+(12, 2, '¿Quién fue el primer presidente de los Estados Unidos?', 'multiple', 'facil', 1.0, 1),
+(13, 2, 'El Renacimiento comenzó en Italia.', 'verdadero_falso', 'facil', 1.0, 1),
+(14, 2, 'Escribe el nombre del explorador que completó la primera circunnavegación del mundo (aunque murió en el camino).', 'abierta', 'dificil', 2.0, 1),
+(15, 2, '¿Qué civilización construyó las pirámides de Giza?', 'multiple', 'facil', 1.0, 1),
+(16, 2, '¿En qué siglo ocurrió la Revolución Francesa?', 'multiple', 'medio', 1.5, 1),
+(17, 2, 'La Segunda Guerra Mundial terminó en 1945.', 'verdadero_falso', 'facil', 1.0, 1),
+(18, 2, '¿Quién es conocido como el "Padre de la Historia"?', 'multiple', 'dificil', 1.5, 1),
+(19, 2, 'Explica brevemente la importancia de la Batalla de Stalingrado en la Segunda Guerra Mundial.', 'abierta', 'dificil', 2.5, 1),
+(20, 2, 'La Edad Media comienza con la caída del Imperio Romano de Occidente.', 'verdadero_falso', 'medio', 1.0, 1);
+
+-- Materia 3: Ciencias Naturales (10 preguntas, id_materia=3)
+INSERT INTO `banco_preguntas` (`id_pregunta_banco`, `id_materia`, `enunciado`, `tipo_pregunta`, `nivel_dificultad`, `puntuacion`, `activa`) VALUES
+(21, 3, '¿Cuál es la fórmula química del agua?', 'multiple', 'facil', 1.0, 1),
+(22, 3, 'El sol es una estrella.', 'verdadero_falso', 'facil', 1.0, 1),
+(23, 3, 'Describe el proceso de fotosíntesis.', 'abierta', 'medio', 2.0, 1),
+(24, 3, '¿Qué órgano del cuerpo humano bombea la sangre?', 'multiple', 'facil', 1.0, 1),
+(25, 3, '¿Cuál es la unidad básica de la vida?', 'multiple', 'medio', 1.0, 1),
+(26, 3, 'La fuerza de gravedad nos mantiene unidos a la Tierra.', 'verdadero_falso', 'facil', 1.0, 1),
+(27, 3, '¿Qué gas es el más abundante en la atmósfera terrestre?', 'multiple', 'dificil', 1.5, 1),
+(28, 3, '¿Cuál es la ley que establece que "la materia no se crea ni se destruye, solo se transforma"?', 'multiple', 'dificil', 2.0, 1),
+(29, 3, 'Menciona los tres estados fundamentales de la materia.', 'abierta', 'medio', 1.5, 1),
+(30, 3, 'Los virus son organismos vivos.', 'verdadero_falso', 'medio', 1.0, 1);
+
+-- Materia 4: Literatura (10 preguntas, id_materia=4)
+INSERT INTO `banco_preguntas` (`id_pregunta_banco`, `id_materia`, `enunciado`, `tipo_pregunta`, `nivel_dificultad`, `puntuacion`, `activa`) VALUES
+(31, 4, '¿Quién escribió "Cien años de soledad"?', 'multiple', 'facil', 1.0, 1),
+(32, 4, 'Un soneto es un tipo de poema que tiene siempre 14 versos.', 'verdadero_falso', 'facil', 1.0, 1),
+(33, 4, 'Define el concepto de "Metáfora" en la poesía.', 'abierta', 'medio', 2.0, 1),
+(34, 4, '¿Cuál es la obra más famosa de Miguel de Cervantes?', 'multiple', 'facil', 1.0, 1),
+(35, 4, '¿Quién es el autor de "Romeo y Julieta"?', 'multiple', 'facil', 1.0, 1),
+(36, 4, 'El "boom" latinoamericano fue un movimiento de arte plástico.', 'verdadero_falso', 'medio', 1.0, 1),
+(37, 4, '¿Qué tipo de narrador utiliza el pronombre "yo"?', 'multiple', 'medio', 1.5, 1),
+(38, 4, '¿En qué país se desarrolla la novela "Crimen y castigo"?', 'multiple', 'dificil', 1.5, 1),
+(39, 4, 'Menciona tres géneros literarios principales.', 'abierta', 'medio', 1.5, 1),
+(40, 4, 'Un cuento es generalmente más extenso que una novela.', 'verdadero_falso', 'facil', 1.0, 1);
+
+-- Materia 5: Geografía (10 preguntas, id_materia=5)
+INSERT INTO `banco_preguntas` (`id_pregunta_banco`, `id_materia`, `enunciado`, `tipo_pregunta`, `nivel_dificultad`, `puntuacion`, `activa`) VALUES
+(41, 5, '¿Cuál es el océano más grande del mundo?', 'multiple', 'facil', 1.0, 1),
+(42, 5, 'La capital de Australia es Sídney.', 'verdadero_falso', 'facil', 1.0, 1),
+(43, 5, '¿Qué es un paralelo en términos geográficos?', 'abierta', 'medio', 2.0, 1),
+(44, 5, '¿En qué continente se encuentra el desierto del Sahara?', 'multiple', 'facil', 1.0, 1),
+(45, 5, '¿Cuál es la montaña más alta del mundo?', 'multiple', 'medio', 1.0, 1),
+(46, 5, 'Brasil es el país más grande de Sudamérica.', 'verdadero_falso', 'facil', 1.0, 1),
+(47, 5, '¿Qué nombre recibe la línea imaginaria que divide la Tierra en hemisferio oriental y occidental?', 'multiple', 'dificil', 1.5, 1),
+(48, 5, '¿Cuál es el río más caudaloso del mundo?', 'multiple', 'dificil', 1.5, 1),
+(49, 5, 'Menciona el nombre de la capital de Japón.', 'abierta', 'facil', 1.0, 1),
+(50, 5, 'El clima polar se encuentra solo en el Polo Norte.', 'verdadero_falso', 'medio', 1.0, 1);
+
+-- Materia 6: Inglés (10 preguntas, id_materia=6)
+INSERT INTO `banco_preguntas` (`id_pregunta_banco`, `id_materia`, `enunciado`, `tipo_pregunta`, `nivel_dificultad`, `puntuacion`, `activa`) VALUES
+(51, 6, 'What is the plural of "child"?', 'multiple', 'facil', 1.0, 1),
+(52, 6, '"She go to the store every day" is grammatically correct.', 'verdadero_falso', 'facil', 1.0, 1),
+(53, 6, 'Write the past tense of the verb "to eat".', 'abierta', 'facil', 1.0, 1),
+(54, 6, 'Which word is a synonym for "happy"?', 'multiple', 'medio', 1.0, 1),
+(55, 6, 'Complete the sentence: "I ___ watching TV when the phone rang."', 'multiple', 'medio', 1.5, 1),
+(56, 6, 'The word "library" means bookstore in Spanish.', 'verdadero_falso', 'medio', 1.0, 1),
+(57, 6, 'What is the meaning of the idiom "break a leg"?', 'multiple', 'dificil', 1.5, 1),
+(58, 6, 'Which of these is a modal verb?', 'multiple', 'medio', 1.0, 1),
+(59, 6, 'Write a sentence in the present perfect tense.', 'abierta', 'dificil', 2.0, 1),
+(60, 6, 'The contraction "I''ll" stands for "I will".', 'verdadero_falso', 'facil', 1.0, 1);
+
+
+-- *** INSERTS PARA opciones_banco (Opciones de preguntas de Opción Múltiple, id_opcion_banco comienza en 9) ***
+
+-- Matemáticas
+INSERT INTO `opciones_banco` (`id_opcion_banco`, `id_pregunta_banco`, `letra_opcion`, `texto_opcion`, `es_correcta`) VALUES
+(9, 6, 'A', '5', 0),
+(10, 6, 'B', '6', 1),
+(11, 6, 'C', '7', 0),
+(12, 6, 'D', '8', 0),
+(13, 9, 'A', '6', 0),
+(14, 9, 'B', '8', 1),
+(15, 9, 'C', '9', 0),
+(16, 9, 'D', '4', 0);
+
+-- Historia
+INSERT INTO `opciones_banco` (`id_opcion_banco`, `id_pregunta_banco`, `letra_opcion`, `texto_opcion`, `es_correcta`) VALUES
+(17, 11, 'A', '1989', 1),
+(18, 11, 'B', '1991', 0),
+(19, 11, 'C', '1985', 0),
+(20, 11, 'D', '1990', 0),
+(21, 12, 'A', 'Thomas Jefferson', 0),
+(22, 12, 'B', 'George Washington', 1),
+(23, 12, 'C', 'Abraham Lincoln', 0),
+(24, 12, 'D', 'John Adams', 0),
+(25, 15, 'A', 'Romanos', 0),
+(26, 15, 'B', 'Sumerios', 0),
+(27, 15, 'C', 'Egipcios', 1),
+(28, 15, 'D', 'Griegos', 0),
+(29, 16, 'A', 'XVII', 0),
+(30, 16, 'B', 'XVIII', 1),
+(31, 16, 'C', 'XIX', 0),
+(32, 16, 'D', 'XVI', 0),
+(33, 18, 'A', 'Tucídides', 0),
+(34, 18, 'B', 'Heródoto', 1),
+(35, 18, 'C', 'Platón', 0),
+(36, 18, 'D', 'Aristóteles', 0);
+
+-- Ciencias Naturales
+INSERT INTO `opciones_banco` (`id_opcion_banco`, `id_pregunta_banco`, `letra_opcion`, `texto_opcion`, `es_correcta`) VALUES
+(37, 21, 'A', 'CO2', 0),
+(38, 21, 'B', 'H2O', 1),
+(39, 21, 'C', 'O2', 0),
+(40, 21, 'D', 'NaCl', 0),
+(41, 24, 'A', 'Pulmón', 0),
+(42, 24, 'B', 'Hígado', 0),
+(43, 24, 'C', 'Corazón', 1),
+(44, 24, 'D', 'Estómago', 0),
+(45, 25, 'A', 'Átomo', 0),
+(46, 25, 'B', 'Molécula', 0),
+(47, 25, 'C', 'Célula', 1),
+(48, 25, 'D', 'Tejido', 0),
+(49, 27, 'A', 'Oxígeno', 0),
+(50, 27, 'B', 'Nitrógeno', 1),
+(51, 27, 'C', 'Argón', 0),
+(52, 27, 'D', 'Dióxido de Carbono', 0),
+(53, 28, 'A', 'Ley de Ohm', 0),
+(54, 28, 'B', 'Ley de la Conservación de la Energía', 0),
+(55, 28, 'C', 'Ley de la Conservación de la Materia', 1),
+(56, 28, 'D', 'Ley de Boyle', 0);
+
+-- Literatura
+INSERT INTO `opciones_banco` (`id_opcion_banco`, `id_pregunta_banco`, `letra_opcion`, `texto_opcion`, `es_correcta`) VALUES
+(57, 31, 'A', 'Julio Cortázar', 0),
+(58, 31, 'B', 'Gabriel García Márquez', 1),
+(59, 31, 'C', 'Mario Vargas Llosa', 0),
+(60, 31, 'D', 'Carlos Fuentes', 0),
+(61, 34, 'A', 'La Galatea', 0),
+(62, 34, 'B', 'Novelas Ejemplares', 0),
+(63, 34, 'C', 'Don Quijote de la Mancha', 1),
+(64, 34, 'D', 'Viaje del Parnaso', 0),
+(65, 35, 'A', 'Charles Dickens', 0),
+(66, 35, 'B', 'William Shakespeare', 1),
+(67, 35, 'C', 'Jane Austen', 0),
+(68, 35, 'D', 'Edgar Allan Poe', 0),
+(69, 37, 'A', 'Omnisciente', 0),
+(70, 37, 'B', 'Testigo', 0),
+(71, 37, 'C', 'Protagonista', 1),
+(72, 37, 'D', 'Tercera persona', 0),
+(73, 38, 'A', 'Francia', 0),
+(74, 38, 'B', 'Reino Unido', 0),
+(75, 38, 'C', 'Rusia', 1),
+(76, 38, 'D', 'Italia', 0);
+
+-- Geografía
+INSERT INTO `opciones_banco` (`id_opcion_banco`, `id_pregunta_banco`, `letra_opcion`, `texto_opcion`, `es_correcta`) VALUES
+(77, 41, 'A', 'Atlántico', 0),
+(78, 41, 'B', 'Índico', 0),
+(79, 41, 'C', 'Pacífico', 1),
+(80, 41, 'D', 'Ártico', 0),
+(81, 44, 'A', 'Asia', 0),
+(82, 44, 'B', 'África', 1),
+(83, 44, 'C', 'América del Sur', 0),
+(84, 44, 'D', 'Oceanía', 0),
+(85, 45, 'A', 'K2', 0),
+(86, 45, 'B', 'Everest', 1),
+(87, 45, 'C', 'Kangchenjunga', 0),
+(88, 45, 'D', 'Lhotse', 0),
+(89, 47, 'A', 'Ecuador', 0),
+(90, 47, 'B', 'Meridiano de Greenwich', 1),
+(91, 47, 'C', 'Trópico de Cáncer', 0),
+(92, 47, 'D', 'Círculo Polar Ártico', 0),
+(93, 48, 'A', 'Nilo', 0),
+(94, 48, 'B', 'Misisipi', 0),
+(95, 48, 'C', 'Amazonas', 1),
+(96, 48, 'D', 'Yangtsé', 0);
+
+-- Inglés
+INSERT INTO `opciones_banco` (`id_opcion_banco`, `id_pregunta_banco`, `letra_opcion`, `texto_opcion`, `es_correcta`) VALUES
+(97, 51, 'A', 'Childs', 0),
+(98, 51, 'B', 'Children', 1),
+(99, 51, 'C', 'Childes', 0),
+(100, 51, 'D', 'Child''s', 0),
+(101, 54, 'A', 'Sad', 0),
+(102, 54, 'B', 'Joyful', 1),
+(103, 54, 'C', 'Angry', 0),
+(104, 54, 'D', 'Tired', 0),
+(105, 55, 'A', 'am', 0),
+(106, 55, 'B', 'was', 1),
+(107, 55, 'C', 'were', 0),
+(108, 55, 'D', 'is', 0),
+(109, 57, 'A', 'Be careful', 0),
+(110, 57, 'B', 'Good luck', 1),
+(111, 57, 'C', 'Hurry up', 0),
+(112, 57, 'D', 'Be quiet', 0),
+(113, 58, 'A', 'Running', 0),
+(114, 58, 'B', 'Will', 1),
+(115, 58, 'C', 'Eats', 0),
+(116, 58, 'D', 'Quickly', 0);
+
+
+-- *** INSERTS PARA respuestas_banco (Respuestas de preguntas Abiertas, id_respuesta_banco comienza en 3) ***
+
+-- Matemáticas
+INSERT INTO `respuestas_banco` (`id_respuesta_banco`, `id_pregunta_banco`, `respuesta_correcta`, `es_exacta`) VALUES
+(3, 8, '25', 1);
+
+-- Historia
+INSERT INTO `respuestas_banco` (`id_respuesta_banco`, `id_pregunta_banco`, `respuesta_correcta`, `es_exacta`) VALUES
+(4, 14, 'Fernando de Magallanes', 1),
+(5, 19, 'Fue un punto de inflexión en el Frente Oriental que detuvo el avance alemán.', 0);
+
+-- Ciencias Naturales
+INSERT INTO `respuestas_banco` (`id_respuesta_banco`, `id_pregunta_banco`, `respuesta_correcta`, `es_exacta`) VALUES
+(6, 23, 'Proceso por el cual las plantas convierten la luz solar, agua y dióxido de carbono en glucosa y oxígeno.', 0),
+(7, 29, 'Sólido, Líquido, Gaseoso', 0);
+
+-- Literatura
+INSERT INTO `respuestas_banco` (`id_respuesta_banco`, `id_pregunta_banco`, `respuesta_correcta`, `es_exacta`) VALUES
+(8, 33, 'Figura retórica que consiste en identificar un término real con otro imaginario para expresar una idea.', 0),
+(9, 39, 'Lírico, Narrativo, Dramático', 0);
+
+-- Geografía
+INSERT INTO `respuestas_banco` (`id_respuesta_banco`, `id_pregunta_banco`, `respuesta_correcta`, `es_exacta`) VALUES
+(10, 43, 'Círculo imaginario paralelo al Ecuador que mide la latitud.', 0),
+(11, 49, 'Tokio', 1);
+
+-- Inglés
+INSERT INTO `respuestas_banco` (`id_respuesta_banco`, `id_pregunta_banco`, `respuesta_correcta`, `es_exacta`) VALUES
+(12, 53, 'ate', 1),
+(13, 59, 'I have eaten breakfast.', 0);
+
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
